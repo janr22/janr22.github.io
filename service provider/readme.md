@@ -35,7 +35,7 @@ localhost:8080
 
 ## Authors
 
-* **John Rey Balinag** - *Initial work* - [WebtechLab Finals](https://github.com/janr22/janr22.github.io)
+* **John Rey Balinag** - *Initial work* - [webtech-finals](https://github.com/janr22/janr22.github.io)
 * **Je-ann Luis Dacyas**
 * **Kim Shane**
 
