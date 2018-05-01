@@ -29,7 +29,7 @@ Load up your browser then type this to address bar.
 ```
 localhost:8080
 ```
-*8080 since we used this port where the app listen
+*8080 since we used this port that the app listen to
 
 ![alt text](https://preview.ibb.co/ejQuKS/index.png)
 
