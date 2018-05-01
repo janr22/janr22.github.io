@@ -33,7 +33,7 @@ localhost:8080
 
 ## Authors
 
-* **John Rey Balinag** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+* **John Rey Balinag** - *Initial work* - [WebtechLab Finals](https://github.com/janr22/janr22.github.io)
 
 See also the list of [contributors](https://github.com/janr22/janr22.github.io/contributors) who participated in this project.
 
