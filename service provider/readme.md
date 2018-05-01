@@ -35,11 +35,7 @@ localhost:8080
 
 * **John Rey Balinag** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+See also the list of [contributors](https://github.com/janr22/janr22.github.io/contributors) who participated in this project.
 
 ## Acknowledgments
 
