@@ -6,7 +6,7 @@ What things you need to install.
 * [node.js](https://nodejs.org/en/) - JavaScript runtime built on Chrome's V8 JavaScript engine.
 * [WampServer](http://www.wampserver.com/en/) - Server software for Windows.
 ### Database
-Create new schema named "service provider" then import user.sql which contains the tables going to be filled up by our web app.
+Create new schema named **service provider** then import user.sql which contains the tables going to be filled up by our web app.
 ### Installing
 Go to cmd and navigate to project. (example project is in desktop)
 ```
