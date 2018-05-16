@@ -36,26 +36,46 @@ public class login extends HttpServlet {
             /* TODO output your page here. You may use following sample code. */
             String username = request.getParameter("username");
             String password = request.getParameter("password");
-            HttpSession session = request.getSession();
-            session.setAttribute("username", username);
-            
-            try{
+
+            try {
                 Class.forName("com.mysql.jdbc.Driver").newInstance();
                 Connection con = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/car_rental", "root", "");
                 Statement st = con.createStatement();
                 ResultSet rs = st.executeQuery("SELECT * FROM users WHERE username='" + username + "' AND password='" + password + "'");
-            if (rs.next()) {
-                response.sendRedirect("home.jsp"); 
-           } else {
-               out.println("<script type=\"text/javascript\">");
-               out.println("alert('Invalid username or password')");
-               out.println("location='index.jsp';");
-               out.println("</script>");
-               
-            }
-                
-            }catch(ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex){
-                
+
+                if (rs.next()) {
+                    HttpSession session = request.getSession();
+                    session.setAttribute("username", username);
+                    session.setAttribute("userid", rs.getString("user_id"));
+                    session.setAttribute("lastname", rs.getString("lastname"));
+                    session.setAttribute("firstname", rs.getString("firstname"));
+                    session.setAttribute("email", rs.getString("email"));
+                    session.setAttribute("contact", rs.getString("contact"));
+                    session.setAttribute("address", rs.getString("address"));
+
+                    if (!session.getAttribute("username").equals(null)) {
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/car_rental", "root", "");
+                        String query = "UPDATE users SET status = ? WHERE username = ?";
+                        PreparedStatement pst = conn.prepareStatement(query);
+                        pst.setString(1, "Active");
+                        pst.setString(2, username);
+                        pst.executeUpdate();
+                        
+                        response.sendRedirect("home.jsp");
+                    }
+
+                    
+                } else {
+                    out.println("<script type=\"text/javascript\">");
+                    out.println("alert('Invalid username or password')");
+                    out.println("location='index.jsp';");
+                    out.println("</script>");
+
+                }
+
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex) {
+
             }
         }
     }

@@ -99,12 +99,20 @@
                     <form id="register-form" method="post" action="register">
                         <div><h1>Register</h1></div>
                         <div class="form-group">
+                            <label>Firstname:</label>
+                            <input type="text" class="form-control" name="firstname" placeholder="Firstname" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Lastname:</label>
+                            <input type="text" class="form-control" name="lastname" placeholder="Lastname" required>
+                        </div>
+                        <div class="form-group">
                             <label>Email:</label>
-                            <input type="email" class="form-control" name="email" placeholder="Example@hotmail.com">
+                            <input type="email" class="form-control" name="email" placeholder="Example@hotmail.com" required>
                         </div>
                         <div class="form-group">
                             <label>Username:</label>
-                            <input type="text" class="form-control" name="username" placeholder="Example">
+                            <input type="text" class="form-control" name="username" placeholder="Example" required>
                         </div>
                         <div class="form-group">
                             <label>Password:</label>
@@ -116,12 +124,12 @@
                         </div>
                         <div class="form-group">
                             <label>Contact Number:</label>
-                            <input type="text" class="form-control" name="number" placeholder="Contact Number">
+                            <input type="text" class="form-control" name="number" placeholder="Contact Number" required>
                             <div id="unmatched"></div>
                         </div>
                         <div class="form-group">
                             <label>Address:</label>
-                            <input type="text" class="form-control" name="address" placeholder="Address">
+                            <input type="text" class="form-control" name="address" placeholder="Address" required>
                         </div>
                         <div class="form-group">
                             <input type="submit" class="btn btn-primary" name="submit" value="Register">

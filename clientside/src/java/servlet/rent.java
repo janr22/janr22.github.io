@@ -1,101 +1,121 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package servlet;
-
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author msi
+ * @author Kupal
  */
 public class rent extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-        try {   
-                
-                HttpSession session = request.getSession();
-                session.getAttribute("username");
-                
-                Class.forName("com.mysql.jdbc.Driver");
-                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/car_rental", "root", "");
-                Statement st = con.createStatement();
-                int rs = st.executeUpdate("INSERT INTO orders(email,password,username,contactNumber,completeAddress)values('" 
-                        + email + "','" 
-                        + password + "','" 
-                        + username + "','" 
-                        + number + "','" 
-                        + address + "')");
-                out.println("<script type=\"text/javascript\">");
-                out.println("alert('Registration Successful')");
-                out.println("location='index.jsp';");
-                out.println("</script>");
-                
-            }catch(ClassNotFoundException | SQLException ex){
-                
-            }
-        }
-    }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
-    }
+       
+        String status = request.getParameter("changeStatus");
+        String car_id = request.getParameter("carid");
+        String user_id = request.getParameter("userid");
+        PrintWriter pw = response.getWriter();
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
+        if(status.equalsIgnoreCase("Rent")){
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+                Connection conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/car_rental", "root" , "");
+                  String query = "UPDATE cars set status=? where car_id=?";
+
+                   PreparedStatement pst = (PreparedStatement) conn.prepareStatement(query);
+
+                   pst.setString(1, "Rented");
+                   pst.setString(2, car_id);
+
+
+                   int rs = pst.executeUpdate();
+
+                    if(rs > 0){
+                        //without referencial integrity
+                        query = "INSERT into rent(user_id,car_id) values(?,?)";    
+                        pst = (PreparedStatement) conn.prepareStatement(query);
+                        
+                        pst.setString(1,user_id);
+                        pst.setString(2, car_id);
+                        
+                        rs = pst.executeUpdate();
+                        
+                        if (rs>0) {
+                            response.sendRedirect("home.jsp");    
+                        }
+                        else {
+                                System.out.println("Error!");
+                                }
+                        
+                    }else{
+                        System.out.println("Error!");
+                    }
+                   
+            } catch (IOException | ClassNotFoundException | SQLException ex) {
+                Logger.getLogger(rent.class.getName()).log(Level.SEVERE, null, ex);
+            }
+              
+            
+           
+            
+            
+        } else if (status.equalsIgnoreCase("Cancel")) {
+             try {
+                Class.forName("com.mysql.jdbc.Driver");
+                Connection conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/car_rental", "root" , "");
+                   
+                   String query = "SELECT * FROM rent WHERE car_id=? AND user_id=?"; 
+                   PreparedStatement pst = (PreparedStatement) conn.prepareStatement(query);
+                   
+                   pst.setString(1, car_id);
+                   pst.setString(2, user_id);
+                   
+                   int rs = pst.executeUpdate();
+                   
+                   if(rs > 0){
+                   
+                   query = "UPDATE cars set status=? where car_id=?";
+                   pst = (PreparedStatement) conn.prepareStatement(query);
+                   
+                   pst.setString(1, "Available");
+                   pst.setString(2, car_id);
+                   
+                   rs = pst.executeUpdate();
+                   
+                    if(rs > 0){
+                        
+                        query = "DELETE FROM rent WHERE car_id=? AND user_id=?"; 
+                        pst = (PreparedStatement) conn.prepareStatement(query);
+                   
+                        pst.setString(1, car_id);
+                        pst.setString(2, user_id);
+                   
+                        rs = pst.executeUpdate();
+                        
+                        if (rs>0) {
+                        response.sendRedirect("home.jsp"); }
+                    }
+                   }
+                   
+            } catch (IOException | ClassNotFoundException | SQLException ex) {
+                Logger.getLogger(rent.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }   
+            
+        
+    }
+    
+
+    
 
 }

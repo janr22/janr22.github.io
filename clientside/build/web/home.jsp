@@ -54,7 +54,7 @@
                     <div><img class="rounded-circle p-auto m-auto w-auto h-auto" src="/images/profile.png" alt=""></div>
                     <div class="text-center text-light"><h1><%=session.getAttribute("username")%></h1></div>
                     <nav class="flex-column text-center">
-                        <input class="btn-primary w-100" type="button" href="home.jsp" value="home">
+                        <a href="home.jsp"><input class="btn-primary w-100" type="button" value="home"></a>
                         <input class="btn-primary w-100" type="button" data-toggle="collapse" data-target="#category" aria-expanded="false" aria-controls="category" value="Service Provider">
                         <div class="collapse" id="category">
                             <div>
@@ -65,24 +65,28 @@
                                 </form>
                             </div>
                         </div>
+                        <form action="profile.jsp">
+                            <input class="btn-primary w-100" type="submit" value="profile">
+                        </form>
                         <form action="logout">
                             <input class="btn-primary w-100" type="submit" value="logout">
                         </form>
-                        
+
                     </nav>
                 </div>
                 <div class="container col-md-10 bg-light p-0">
                     <div class="row">
-                    <div class="p-5 col-md-9"><h1>Cars</h1></div>
-                    <form class="p-5 col-md-3">
-                        <label>note: search one word at a time</label>
-                        <input class="w-auto" type="text" placeholder="Search" name="search">
-                        <button class="btn-outline-success w-auto" type="submit">Search</button>
-                    </form>
+                        <div class="p-5 col-md-9"><h1>Cars</h1></div>
+                        <form class="p-5 col-md-3">
+                            <label>note: search one word at a time</label>
+                            <input class="w-auto" type="text" placeholder="Search" name="search">
+                            <button class="btn-outline-success w-auto" type="submit">Search</button>
+                        </form>
                     </div>
                     <div class="row">
                         <%@include file="includes/search.jsp"%>
-                        <%
+                        <%  
+                            
                             String provider = request.getParameter("provider");
                             String type;
                             String model;
@@ -91,12 +95,15 @@
                             String capacity;
                             String price;
                             byte[] image;
+                            int carID;
+
                             try {
                                 Class.forName("com.mysql.jdbc.Driver").newInstance();
                                 Connection con = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/car_rental", "root", "");
                                 Statement st = con.createStatement();
                                 ResultSet rs = st.executeQuery("SELECT * FROM cars WHERE provider = '" + provider + "'");
                                 while (rs.next()) {
+                                    carID = rs.getInt("car_id");
                                     image = rs.getBytes("car_image");
                                     type = rs.getString("type");
                                     model = rs.getString("model");
@@ -106,16 +113,25 @@
                                     price = rs.getString("price");
 
                                     out.println("<div class='m-5 col-xs'>");
-                                    out.println(provider + "<br>");
+                                    out.println("Provider: " + provider + "<br>");
                                     out.println("<img src='" + image + "'><br>");
+                                    out.println("<input type='hidden' name='carid' value='"+ carID +"'>");
+                                    %>
+                                    <input type="hidden" name="userid" value="<%= session.getAttribute("userid")%>" />
+                                    <%
                                     out.println("Type: " + type + "<br>");
                                     out.println("Model: " + model + "<br>");
                                     out.println("Brand: " + brand + "<br>");
                                     out.println("Transition: " + transition + "<br>");
                                     out.println("Capacity: " + capacity + "<br>");
-                                    out.println("Price: " + price + "<br>");
+                                    out.println("Price: <input value = '" + price + "' name='price' disabled><br>");
+                                    
                                     out.println("<form action='rent'>");
-                                    out.println("<input class='btn-primary w-100' type='submit' value='rent'>");
+                                    if(rs.getString("status").equals("Available")){
+                                    out.println("<input class='btn-primary w-100' name='changeStatus' type='submit' value='rent'>");
+                                    }else{
+                                    out.println("<input class='btn-primary w-100' name='changeStatus' type='submit' value='cancel'>");    
+                                    }
                                     out.println("</form>");
                                     out.println("</div>");
 
@@ -125,9 +141,23 @@
 
                             }
                         %>
+                       
                     </div>
                 </div>
             </div>
         </div>
+        <script type="text/javascript">
+            function compute(){
+                //500 per day
+                var total_price = parseInt(document.getElementById('price').value);
+                var days = parseInt(document.getElementById('days').value);
+                var counter = 0;
+                while(counter < days){
+                    total_price = total_price + 500;
+                    counter++;
+                }
+                document.getElementById('tprice').value = total_price;
+            }
+        </script>
     </body>
 </html>

@@ -7,6 +7,9 @@ package servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -34,9 +37,29 @@ public class logout extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             HttpSession session = request.getSession();
-            if(!session.getAttribute("username").equals(null)){
-            request.getSession().invalidate();
-            response.sendRedirect("index.jsp");
+            String username = (String) session.getAttribute("username");
+
+            if (!session.getAttribute("username").equals(null)) {
+
+                try {
+                    Class.forName("com.mysql.jdbc.Driver").newInstance();
+                    Connection con = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/car_rental", "root", "");
+                    Statement st = con.createStatement();
+                    ResultSet rs = st.executeQuery("SELECT * FROM users WHERE username='" + username + "' AND status='Active'");
+                    if (rs.first()) {
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/car_rental", "root", "");
+                        String query = "UPDATE users SET status = ? WHERE username = ?";
+                        PreparedStatement pst = conn.prepareStatement(query);
+                        pst.setString(1, "Inactive");
+                        pst.setString(2, username);
+                        pst.executeUpdate();
+                    }
+                } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex) {
+                    Logger.getLogger(logout.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                request.getSession().invalidate();
+                response.sendRedirect("index.jsp");
             }
         }
     }

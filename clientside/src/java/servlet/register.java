@@ -35,13 +35,13 @@ public class register extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             String email = request.getParameter("email");
+            String firstname = request.getParameter("firstname");
+            String lastname = request.getParameter("lastname");
             String username = request.getParameter("username");
             String password = request.getParameter("password");
             String repassword = request.getParameter("repassword");
             String number = request.getParameter("number");
             String address = request.getParameter("address");
-            HttpSession session = request.getSession();
-            session.setAttribute("user", username);
             
             if (!repassword.equals(password)){
             out.println("<script type=\"text/javascript\">");
@@ -53,7 +53,9 @@ public class register extends HttpServlet {
                 Class.forName("com.mysql.jdbc.Driver");
                 Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/car_rental", "root", "");
                 Statement st = con.createStatement();
-                int rs = st.executeUpdate("INSERT INTO users(email,password,username,contactNumber,completeAddress)values('" 
+                int rs = st.executeUpdate("INSERT INTO users(firstname, lastname, email,password,username,contactNumber,completeAddress)values('" 
+                        + firstname + "','"
+                        + lastname + "','"
                         + email + "','" 
                         + password + "','" 
                         + username + "','" 
