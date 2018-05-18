@@ -1,0 +1,38 @@
+extends layout
+block content
+    .container-whole
+        section.container
+           h1 Register
+
+           if err
+                p.error= err
+
+           if (message)
+                p.message=message + ", "   
+                    a(href="/addpost") start posting now!
+
+
+           form(action="/users/register" enctype="multipart/form-data" method="POST" )
+                label(for="username") Username
+                input(type="text" name="username" required)
+
+                label(for="email") Email
+                input(type="email" name="email" required)
+
+                label(for="website") Website
+                input(type="website" name="website" required)
+
+                label(for="address") Address
+                input(type="address" name="address" required)
+
+                label(for="contact") Contact
+                input(type="number" name="contact" required)
+
+                label(for="Password") Password
+                input(type="password" name="password" required)
+
+                label(for="image") your image
+                input(type="file" name="image" required)
+
+                input(type="submit" value="Submit")
+

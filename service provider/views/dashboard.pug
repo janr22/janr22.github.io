@@ -1,0 +1,14 @@
+extends layout
+block content
+    .container-whole
+        section.container
+            img(class="profile-img" src="../"+ user.image)
+
+            if (user != undefined)
+                h1=user.username
+                h4=user.email
+                h4=user.website
+                h4=user.address
+            p
+                a(href="/addpost" class="newPost") +
+

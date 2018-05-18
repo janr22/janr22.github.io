@@ -1,0 +1,34 @@
+extends layout
+block content 
+    .container-whole
+        section.container
+           h1 Add a post
+           if err
+                p.error= err 
+           form(action="/addpost" enctype="multipart/form-data" method="POST" )
+
+                label(for="plate_number") Plate Number
+                input(type="text" name="plate_number" required)
+
+                label(for="type") Type
+                input(type="text" name="type" required)
+
+                label(for="model") Model
+                input(type="text" name="model" required)
+
+                label(for="brand") Brand
+                input(type="text" name="brand" required)
+
+                label(for="transition") Transition
+                input(type="text" name="transition" required)
+
+                label(for="capacity") Capacity
+                input(type="number" name="capacity" required)
+
+                label(for="price") Price
+                input(type="number" name="price" required)
+
+                label(for="cover") Add a Picture
+                input(type="file" name="cover" required)
+                input(type="submit" value="create post")
+

@@ -1,0 +1,18 @@
+extends layout
+block content
+    .container-whole
+        section.container-whole
+            h1 Check out the recent cars
+            div.pins-container
+                if (posts != undefined)
+                    if (posts.length > 0)
+                        each post in posts
+                            div.pins 
+                                    a(href="/posts/" + post.id)
+                                        img(class="cover" src=post.image)
+                    else                                           
+                        p No content to display
+                else                                           
+                    p The database is not set
+                p
+                    a(href="/addpost" class="newPost") +

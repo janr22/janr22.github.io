@@ -1,0 +1,42 @@
+extends layout
+block content
+    .container-whole 
+        section.container
+           h1 Edit post       
+
+           form(action="/posts/edit/"+ post.id enctype="multipart/form-data" method="POST" )
+                label(for="plate_number") Plate Number
+                input(type="text" name="plate_number" value=post.plate_number)
+
+                label(for="type") Type
+                input(type="text" name="type" value=post.type)
+
+                label(for="model") Model
+                input(type="text" name="model" value=post.model)
+
+                label(for="brand") Brand
+                input(type="text" name="brand" value=post.brand)
+
+                label(for="transition") Transition
+                input(type="text" name="transition" value=post.transition)
+
+                label(for="capacity") Capacity
+                input(type="text" name="capacity" value=post.capacity)
+
+                label(for="price") Price
+                input(type="text" name="price" value=post.price)
+
+                label(for="cover") add an image
+                input(type="file" id="cover" name="cover")
+                input(type="hidden" name="hidden" value=post.image)
+
+                div.covers-comparison 
+                    div.preview           
+                        p current cover image
+                        img( src="../../"+ post.image)  
+
+                    div.new-preview
+                        p new image as cover
+                        img(src="../../images/not_found.jpg" id="new-cover")
+
+                input(type="submit" value="Update post")

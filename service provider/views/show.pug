@@ -1,0 +1,23 @@
+extends layout
+block content
+  
+    .container-whole
+        section.container-whole
+            h1=post.brand
+            p= "by " + user.username    
+
+            if (isAuthenticated)
+                if(x != null || x != undefined)
+                    if (x == post.provider)
+                        div.show-menu
+                            a(class="show-links" href="/posts/edit/" + post.id) Edit the post
+                            a(class="show-links" href="/posts/delete/"+ post.id) Delete this post 
+            img(class="show-cover" src="../"+ post.image)
+            p=post.description
+
+            a(class="newPost" href="/addpost") + 
+
+
+       
+
+  
